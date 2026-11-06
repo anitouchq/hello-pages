@@ -1,0 +1,62 @@
+name: CI/CD — GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    name: Проверки и сборка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+      - name: Настроить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Установить зависимости
+        run: npm ci
+      - name: Проверить HTML, CSS, JavaScript и собрать сайт
+        run: npm run ci
+      - name: Сохранить готовую сборку
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+          retention-days: 1
+
+  deploy:
+    name: Публикация на GitHub Pages
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Загрузить артефакт сборки
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+      - name: Настроить GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Подготовить Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Опубликовать сайт
+        id: deployment
+        uses: actions/deploy-pages@v4

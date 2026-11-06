@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.env*
+!.env.example
+.DS_Store
+Thumbs.db
+
+.pnpm-store/
+pnpm-lock.yaml
+work/
+pnpm-workspace.yaml
