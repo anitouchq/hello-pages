@@ -1,50 +1,74 @@
-# Тихий ритм
+# hello-pages
 
-Небольшой сайт о спокойном планировании на React 18 и Vite.
+[![Deploy](https://github.com/anitouchq/hello-pages/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/anitouchq/hello-pages/actions)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-build-646CFF?logo=vite&logoColor=white)
 
-## 📸 Скриншоты
+Небольшой сайт о спокойном планировании на React 18 и Vite. GitHub Actions устанавливает зависимости, проверяет проект, собирает production-версию и публикует каталог `dist/` на GitHub Pages.
+
+## Скриншоты
 
 ### Сайт
+
 ![Главная страница сайта](screenshots/website.png)
 
-### GitHub Actions — успешный CI/CD
+### Успешный GitHub Actions
+
 ![Успешный запуск CI/CD](screenshots/github-actions.png)
 
 ### Настройки GitHub Pages
+
 ![GitHub Pages с источником GitHub Actions](screenshots/github-pages-settings.png)
 
-## 🌐 Сайт
+## Сайт
 
 [Открыть сайт на GitHub Pages](https://anitouchq.github.io/hello-pages/)
 
-## 🛠 Установка и запуск
+## Установка и запуск
+
+Требуется Node.js и npm:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-## 🔁 CI/CD
+Production-сборка:
 
-Workflow: `.github/workflows/ci-cd.yml`. Он запускает проверки и сборку, затем публикует `dist/` на GitHub Pages; деплой зависит от успешного CI.
-
-## 📂 Структура
-
-```text
-hello-pages/
-├── .github/workflows/ci-cd.yml
-├── src/
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── screenshots/
-│   ├── website.png
-│   ├── github-actions.png
-│   └── github-pages-settings.png
-├── index.html
-├── vite.config.js
-├── package.json
-└── README.md
+```bash
+npm run ci
 ```
 
-Автор: [anitouchq](https://github.com/anitouchq)
+## Как работает pipeline
+
+1. Push в `main` и pull request запускают CI.
+2. Устанавливаются зависимости из `package-lock.json` через `npm ci`.
+3. Выполняются проверки и production-сборка.
+4. Каталог `dist/` сохраняется как Actions artifact.
+5. После успешного CI при push в `main` отдельный job публикует сайт на GitHub Pages.
+
+В `vite.config.js` задан базовый путь `/hello-pages/`, необходимый для публикации проекта в подпапке GitHub Pages.
+
+## Структура проекта
+
+| Файл или каталог | Назначение |
+|---|---|
+| `.github/workflows/ci-cd.yml` | CI-проверки, сборка и деплой на GitHub Pages |
+| `src/App.jsx` | Основной React-компонент сайта |
+| `src/main.jsx` | Точка входа React-приложения |
+| `src/index.css` | Глобальные стили |
+| `index.html` | HTML-шаблон приложения |
+| `vite.config.js` | Настройки Vite и базовый путь публикации |
+| `package.json` | Команды проекта и зависимости |
+| `package-lock.json` | Зафиксированные версии npm-зависимостей |
+| `eslint.config.js` | Правила ESLint |
+| `.htmlvalidate.json` | Настройки проверки HTML |
+| `.stylelintrc.json` | Правила Stylelint |
+| `screenshots/` | Скриншоты сайта, Actions и настроек Pages |
+
+## Результаты
+
+- [GitHub Actions](https://github.com/anitouchq/hello-pages/actions)
+- [Настройки GitHub Pages](https://github.com/anitouchq/hello-pages/settings/pages)
+
+[Главный каталог CI/CD проектов](https://github.com/anitouchq/CI-CD-Pipelines)
